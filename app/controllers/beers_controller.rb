@@ -15,10 +15,14 @@ class BeersController < ApplicationController
   # GET /beers/new
   def new
     @beer = Beer.new
+    @breweries = Brewery.all
+    @styles = ["Weizen", "Lager", "Pale ale", "IPA", "Porter"]
   end
 
   # GET /beers/1/edit
   def edit
+    @breweries = Brewery.all
+    @styles = ["Weizen", "Lager", "Pale ale", "IPA", "Porter"]
   end
 
   # POST /beers
@@ -28,13 +32,14 @@ class BeersController < ApplicationController
 
     respond_to do |format|
       if @beer.save
-        format.html { redirect_to @beer, notice: 'Beer was successfully created.' }
-        format.json { render :show, status: :created, location: @beer }
+        format.html { redirect_to beers_path }
+        format.json { render action: 'show', status: :created, location: @beer }
       else
-        format.html { render :new }
+        format.html { render action: 'new' }
         format.json { render json: @beer.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
   # PATCH/PUT /beers/1
@@ -43,9 +48,9 @@ class BeersController < ApplicationController
     respond_to do |format|
       if @beer.update(beer_params)
         format.html { redirect_to @beer, notice: 'Beer was successfully updated.' }
-        format.json { render :show, status: :ok, location: @beer }
+        format.json { head :no_content }
       else
-        format.html { render :edit }
+        format.html { render action: 'edit' }
         format.json { render json: @beer.errors, status: :unprocessable_entity }
       end
     end
@@ -56,7 +61,7 @@ class BeersController < ApplicationController
   def destroy
     @beer.destroy
     respond_to do |format|
-      format.html { redirect_to beers_url, notice: 'Beer was successfully destroyed.' }
+      format.html { redirect_to beers_url }
       format.json { head :no_content }
     end
   end
